@@ -2,7 +2,7 @@ package com.marklogic.client.ext.datamovement.listener;
 
 import com.marklogic.client.datamovement.QueryBatch;
 import com.marklogic.client.datamovement.QueryBatchListener;
-import com.marklogic.client.ext.datamovement.util.SequenceUtil;
+import com.marklogic.client.eval.ServerEvaluationCall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,26 +21,43 @@ public abstract class AbstractPermissionsListener implements QueryBatchListener 
 	@Override
 	public void processEvent(QueryBatch queryBatch) {
 		String[] uris = queryBatch.getItems();
-		StringBuilder sb = new StringBuilder(SequenceUtil.arrayToSequence(uris));
-		sb.append(String.format(" ! %s(., ", getXqueryFunction()));
-		sb.append(buildPermissions(this.rolesAndCapabilities));
-		sb.append(")");
+		StringBuilder sb = new StringBuilder();
+
+		ServerEvaluationCall call = queryBatch.getClient().newServerEval();
+
+		for (int i = 0; i < uris.length; i++) {
+			sb.append("declare variable $uri" + i + " external;\n");
+			call.addVariable("uri" + i, uris[i]);
+		}
+
+		StringBuilder permissionSequence = new StringBuilder("(");
+		for (int j = 0; j < rolesAndCapabilities.length; j += 2) {
+			sb.append("declare variable $role" + j + " external;\n");
+			sb.append("declare variable $capability" + j + " external;\n");
+			call.addVariable("role" + j, rolesAndCapabilities[j]);
+			call.addVariable("capability" + j, rolesAndCapabilities[j + 1]);
+			if (j > 0) {
+				permissionSequence.append(", ");
+			}
+			permissionSequence.append("xdmp:permission($role").append(j).append(", $capability").append(j).append(")");
+		}
+		permissionSequence.append(")");
+
+		final String function = getXqueryFunction();
+
+		for (int i = 0; i < uris.length; i++) {
+			if (i > 0) {
+				sb.append(",\n");
+			}
+			sb.append(String.format("%s($uri%d, %s)", function, i, permissionSequence));
+		}
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("Executing: " + sb);
 		}
-		queryBatch.getClient().newServerEval().xquery(sb.toString()).evalAs(String.class);
-	}
 
-	protected String buildPermissions(String[] rolesAndCapabilities) {
-		StringBuilder sb = new StringBuilder("(");
-		for (int i = 0; i < rolesAndCapabilities.length; i += 2) {
-			if (i > 0) {
-				sb.append(", ");
-			}
-			sb.append(String.format("xdmp:permission(\"%s\", \"%s\")", rolesAndCapabilities[i], rolesAndCapabilities[i + 1]));
-		}
-		sb.append(")");
-		return sb.toString();
+		call.xquery(sb.toString());
+		call.eval();
 	}
 }
 
