@@ -60,7 +60,13 @@ public class WriteRowToTableauConsumer
   private Extract extract;
   private Table table;
 
-  // the tableauTdeFileName specifies the tableau data extract file we'll write to
+  /**
+   * Initialize the Consumer with the Tableau TDE file to which the rows should
+   * be written.
+   *
+   * @param tableauExtractFileName the tableauTdeFileName specifies the tableau
+   *          data extract file we'll write to
+   */
   public WriteRowToTableauConsumer(String tableauExtractFileName) {
     if ( new File(tableauExtractFileName).exists() ) {
       throw new IllegalStateException("Filename \"" + tableauExtractFileName + "\" already exists");
@@ -73,7 +79,13 @@ public class WriteRowToTableauConsumer
     }
   }
 
-  // the accept function is compatible with ExtractViaTemplateListener
+  /**
+   * The accept function is compatible with ExtractViaTemplateListener. It
+   * consumes the TypedRow object emitted by ExtractViaTemplateListener and
+   * writes it to the Tableau TDE file.
+   *
+   * @see java.util.function.Consumer#accept(java.lang.Object)
+   */
   public void accept(TypedRow vals) {
     try {
       Row row = new Row(getTableDef(vals));
@@ -134,13 +146,22 @@ public class WriteRowToTableauConsumer
     }
   }
 
-  // Get the Table definition
+  /**
+   * Get the Table definition. If it is not initialized, initialize and return.
+   *
+   * @param vals the TypedRow object used to initialize the Table Definition.
+   * @return the TableDefinition
+   */
   private TableDefinition getTableDef(TypedRow vals) {
     initialize(vals);
     return tableDef;
   }
 
-  // Initialize the table definition with columns
+  /**
+   * Initialize the table definition with columns from the TypedRow object
+   *
+   * @param vals the TypedRow object used to initialize the Table Definition.
+   */
   private void initialize(TypedRow vals) {
     if ( initialized == false ) {
       synchronized(this) {
@@ -216,18 +237,22 @@ public class WriteRowToTableauConsumer
     return this;
   }
 
-  // closes underlying TableDefinition and Extract. This should be called by the
-  // QueryBatchListener
+  /**
+   * Closes underlying TableDefinition and Extract. This should be called by the
+   * QueryBatchListener (ExtractViaTemplateListener in this case).
+   *
+   * @see java.lang.AutoCloseable#close()
+   */
+  @Override
   public void close() {
     extract.close();
   }
 
   private void checkSupportedTypes(Type type) {
-    if ( type != Type.BOOLEAN &&
-      type != Type.DOUBLE &&
-      type != Type.INTEGER &&
-      type != Type.UNICODE_STRING )
-    {
+    if ( !type.equals(Type.BOOLEAN) &&
+         !type.equals(Type.DOUBLE) &&
+         !type.equals(Type.INTEGER) &&
+         !type.equals(Type.UNICODE_STRING) ) {
       throw new IllegalStateException("Type " + type + " is not yet supported");
     }
   }
