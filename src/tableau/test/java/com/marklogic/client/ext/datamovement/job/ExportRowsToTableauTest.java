@@ -412,34 +412,34 @@ public class ExportRowsToTableauTest extends AbstractDataMovementTest {
     } catch (IllegalStateException e) {
       logger.info("Tableau Data Extract threw expected exception since the type is not yet supported - " + e);
     }
-//    try {
-//      tableauWriter.withColumn("spatialCol", Type.SPATIAL);
-//      fail("should have thrown IllegalStateException because Spatial type is not yet supported");
-//    } catch (IllegalStateException e) {
-//      logger.info("Tableau Data Extract threw expected exception since the type is not yet supported - " + e);
-//    }
+    try {
+      tableauWriter.withColumn("spatialCol", Type.SPATIAL);
+      fail("should have thrown IllegalStateException because Spatial type is not yet supported");
+    } catch (IllegalStateException e) {
+      logger.info("Tableau Data Extract threw expected exception since the type is not yet supported - " + e);
+    }
     outFile.delete();
     tableauWriter.close();
   }
 
-//  @Test
-//  public void testMismatchedTypes() throws IOException {
-//    File outFile = new File("test.tde");
-//    outFile.delete();
-//    WriteRowToTableauConsumer tableauWriter = new WriteRowToTableauConsumer("test.tde")
-//        .withColumn("integerCol", Type.INTEGER);
-//    PlanBuilder pb = Common.connect().newRowManager().newPlanBuilder();
-//    TypedRow values = new TypedRow("tempURI", "2");
-//    values.put("integerCol", pb.xs.booleanVal(true));
-//    try {
-//      tableauWriter.accept(values);
-//      fail("should have thrown IllegalStateException because the types are not compatible");
-//    } catch (IllegalStateException e) {
-//      logger.info("Tableau Data Extract threw expected exception since the types are not compatible - " + e);
-//    }
-//    outFile.delete();
-//    tableauWriter.close();
-//  }
+  @Test
+  public void testMismatchedTypes() throws IOException {
+    File outFile = new File("test.tde");
+    outFile.delete();
+    WriteRowToTableauConsumer tableauWriter = new WriteRowToTableauConsumer("test.tde")
+        .withColumn("integerCol", Type.INTEGER);
+    PlanBuilder pb = client.newRowManager().newPlanBuilder();
+    TypedRow values = new TypedRow("tempURI", "2");
+    values.put("integerCol", pb.xs.booleanVal(true));
+    try {
+      tableauWriter.accept(values);
+      fail("should have thrown IllegalStateException because the types are not compatible");
+    } catch (IllegalStateException e) {
+      logger.info("Tableau Data Extract threw expected exception since the types are not compatible - " + e);
+    }
+    outFile.delete();
+    tableauWriter.close();
+  }
 
   // QA Functional Tests
 
