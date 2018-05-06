@@ -5,7 +5,7 @@ Thus, in order to use these classes, you will need to obtain the Tableau JARs an
 
 ## Obtain the Tableau JARs
 
-TODO Vivek, what's the best place for these? 
+The Tableau JARs can be downloaded from this link - [Tableau SDK](https://onlinehelp.tableau.com/current/api/sdk/en-us/help.htm)
 
 The Tableau JARs can be stored in any location that Gradle can access. One simple option is to make a "lib" directory 
 and copy the files there.
@@ -15,11 +15,13 @@ As an example, if the JARs are were copied to a "lib" directory, the following l
 
     compile files("lib/tableaucommon.jar") 
     compile files("lib/tableauextract.jar")
+    compile files("lib/tableauserver.jar")
+    compile files("lib/jna.jar")
 
 ## Compile the Tableau-dependent source files
 
 Note - in order to compile these source files, this project must depend on marklogic-client-api version 4.0.4 or higher. 
-Please check this project's build.gradle file to verify this. 
+Please check this project's build.gradle file to verify this. Also, Tableau Extract feature requires MarkLogic server version 9.0.5 or higher.
 
 The source file that depend on the Tableau JARs are stored under src/tableau/main/java. These files must be copied to 
 src/main/java so that they are included in the JAR produced by this project. 
