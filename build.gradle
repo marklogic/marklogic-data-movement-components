@@ -8,6 +8,10 @@ plugins {
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
+ext {
+  taskGroup = project.name
+}
+
 repositories {
   jcenter()
 	mavenCentral()
@@ -72,3 +76,20 @@ if (project.hasProperty("myBintrayUser")) {
     }
   }
 }
+
+task copyTableauSourceFiles(type: Copy, group: taskGroup) {
+  description = "Copy Tableau-dependent source files into the main source directory so they can be compiled and packaged into a jar for publishing. " +
+    "You'll first need to add the Tableau jars to the 'dependencies' block as described in src/tableau/README.md ."
+  from "src/tableau/main/java"
+  into "src/main/java"
+}
+
+task createTableauPublication(group: taskGroup) {
+  description = "Publish a version of ${project.name} that includes the Tableau-dependent source files under src/tableau/main/java"
+  dependsOn = ["copyTableauSourceFiles", "publishToMavenLocal"]
+  doLast {
+    println "Version ${version} of ${project.name} has been published to your local Maven repository, which defaults to ~/.m2/repository."
+    println "You can depend on this artifact in another Gradle project by adding mavenLocal() to your list of repositories."
+  }
+}
+publishToMavenLocal.mustRunAfter copyTableauSourceFiles
