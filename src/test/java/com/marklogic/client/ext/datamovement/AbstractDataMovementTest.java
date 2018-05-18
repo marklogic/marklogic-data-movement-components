@@ -91,13 +91,17 @@ public abstract class AbstractDataMovementTest extends Assert {
 	}
 
 	protected void writeDocuments(String... uris) {
-		DataMovementBatchWriter writer = new DataMovementBatchWriter(client);
-		writer.initialize();
 		List<DocumentWriteOperation> list = new ArrayList<>();
 		for (String uri : uris) {
 			list.add(new SimpleDocumentWriteOperation(uri, "<test>" + uri + "</test>", COLLECTION));
 		}
-		writer.write(list);
+		writeDocuments(list);
+	}
+
+	protected void writeDocuments(List<DocumentWriteOperation> writeOperations) {
+		DataMovementBatchWriter writer = new DataMovementBatchWriter(client);
+		writer.initialize();
+		writer.write(writeOperations);
 		writer.waitForCompletion();
 	}
 
