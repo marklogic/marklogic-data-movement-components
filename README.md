@@ -4,6 +4,8 @@ The [Data Movement SDK](http://docs.marklogic.com/guide/java/data-movement) (DMS
 of documents through an asynchronous interface that efficiently distributes workload across a MarkLogic cluster. This 
 project then provides reusable components that depend on DMSDK and make it easier to quickly create applications with DMSDK.
 
+For information on integration with [Tableau](https://www.tableau.com/), please see the [README file](https://github.com/marklogic-community/marklogic-data-movement-components/blob/master/src/tableau/README.md). 
+
 The current focus of this project is simplifying the usage of a QueryBatcher via a class that implements the QueryBatcherJob interface:
 
     QueryBatcherJobTicket run(DatabaseClient client);
