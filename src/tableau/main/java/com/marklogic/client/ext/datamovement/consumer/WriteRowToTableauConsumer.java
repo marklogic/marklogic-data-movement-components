@@ -107,7 +107,19 @@ public class WriteRowToTableauConsumer
                 continue;
               }
             } else if ( column.type == Type.DOUBLE ) {
-              if ( value instanceof XsFloatVal) {
+              if ( value instanceof XsShortVal ) {
+                row.setDouble(index, ((XsShortVal)value).getBigInteger().shortValueExact());
+                continue;
+              } else if ( value instanceof XsIntVal ) {
+                row.setDouble(index, ((XsIntegerVal)value).getBigInteger().intValueExact());
+                continue;
+              } else if ( value instanceof XsIntegerVal) {
+                row.setDouble(index, ((XsIntegerVal)value).getBigInteger().intValueExact());
+                continue;
+              } else if ( value instanceof XsLongVal) {
+                row.setDouble(index, ((XsIntegerVal)value).getBigInteger().longValueExact());
+                continue;
+              } else if ( value instanceof XsFloatVal) {
                 row.setDouble(index, ((XsFloatVal)value).getFloat());
                 continue;
               } else if ( value instanceof XsDoubleVal) {
