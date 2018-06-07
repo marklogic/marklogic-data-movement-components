@@ -54,16 +54,16 @@ public class ExportRowsToTableauTest extends AbstractDataMovementTest {
   public void moreSetup() throws IOException {
     moveMgr = client.newDataMovementManager();
     String[] customers = {
-        "<customers> <customer> <name>Alice</name> <id>1</id> <phone>8793993333</phone> <state>CA</state> <isPrime>true</isPrime> </customer> "
-            + "<customer> <name>Steve</name> <id>9</id> <phone>9999999999</phone> <state>CA</state> <isPrime>true</isPrime> </customer> </customers>",
-        "<customers> <name>Bob</name> <id>2</id> <phone>8793993334</phone> <state>AZ</state> <isPrime>true</isPrime> </customers>",
-        "<customers> <name>Carl</name> <id>3</id> <phone>8793993335</phone> <state>NY</state> <isPrime>true</isPrime> </customers>",
+        "<customers> <customer> <name>Alice</name> <id>1</id> <phone>8793993333</phone> <state>CA</state> <isPrime>true</isPrime> <rating>4.3</rating> </customer> "
+            + "<customer> <name>Steve</name> <id>9</id> <phone>9999999999</phone> <state>CA</state> <isPrime>true</isPrime> <rating>5</rating> </customer> </customers>",
+        "<customers> <name>Bob</name> <id>2</id> <phone>8793993334</phone> <state>AZ</state> <isPrime>true</isPrime> <rating>0</rating> </customers>",
+        "<customers> <name>Carl</name> <id>3</id> <phone>8793993335</phone> <state>NY</state> <isPrime>true</isPrime> <rating>4</rating> </customers>",
         "<customers></customers>",
-        "<customers> <name>Dennis</name> <id>4</id> <phone>8793993336</phone> <state>WA</state> <isPrime>false</isPrime> </customers>",
-        "<customers> <name>Evelyn</name> <id>5</id> <phone>8793993337</phone> <state>NJ</state> <isPrime>false</isPrime> </customers>",
-        "<customers> <name>John</name> <id>6</id> <phone>8793993338</phone> <state>NJ</state> <isPrime>false</isPrime> </customers>",
-        "<customers> <name>Albert</name> <id>7</id> <phone>8793993339</phone> <state>MA</state> <isPrime>false</isPrime> </customers>",
-        "<customers> <name>Evelyn</name> <id>8</id> <phone>8793993340</phone> <state>NJ</state> <isPrime>true</isPrime> </customers>",
+        "<customers> <name>Dennis</name> <id>4</id> <phone>8793993336</phone> <state>WA</state> <isPrime>false</isPrime> <rating>0.0</rating></customers>",
+        "<customers> <name>Evelyn</name> <id>5</id> <phone>8793993337</phone> <state>NJ</state> <isPrime>false</isPrime> <rating>3.5</rating></customers>",
+        "<customers> <name>John</name> <id>6</id> <phone>8793993338</phone> <state>NJ</state> <isPrime>false</isPrime><rating>1.5</rating> </customers>",
+        "<customers> <name>Albert</name> <id>7</id> <phone>8793993339</phone> <state>MA</state> <isPrime>false</isPrime> <rating>3</rating></customers>",
+        "<customers> <name>Evelyn</name> <id>8</id> <phone>8793993340</phone> <state>NJ</state> <isPrime>true</isPrime> <rating>2.85</rating></customers>",
         "<customers></customers>" };
     DocumentManager docMgr = client.newDocumentManager();
     DocumentMetadataHandle metadataHandle = new DocumentMetadataHandle();
@@ -208,6 +208,7 @@ public class ExportRowsToTableauTest extends AbstractDataMovementTest {
             + "      'columns':[ { 'name':'firstName', 'scalarType':'string', 'val':'.' },"
             + "                  { 'name':'id', 'scalarType':'int', 'val':'../id'},"
             + "                  { 'name':'state', 'scalarType':'string', 'val':'../state'},"
+            + "                  { 'name':'rating', 'scalarType':'double', 'val':'../rating'},"
             + "                  { 'name':'phone', 'scalarType':'string', 'val':'../phone'}" + " ] } ] } }"));
     docMgr.writeAs(templatePrimeUri, metadataHandle,
         mapper.readTree("{ 'template':{ 'description':'test template', 'context':'//name', "
@@ -367,6 +368,7 @@ public class ExportRowsToTableauTest extends AbstractDataMovementTest {
         .withColumn("id", Type.INTEGER)
         .withColumn("state", Type.UNICODE_STRING)
         .withColumn("phone", Type.UNICODE_STRING)
+        .withColumn("rating", Type.DOUBLE)
         .withColumn("isPrime", Type.BOOLEAN);
     StructuredQueryDefinition query = new StructuredQueryBuilder().directory(1, "/tde/");
     QueryBatcher qb = moveMgr.newQueryBatcher(query)
@@ -644,7 +646,7 @@ public class ExportRowsToTableauTest extends AbstractDataMovementTest {
     extractor.withTemplate("masterDetail4.tde");
 
     TypedRow incorrectType = new TypedRow("name", "Master 100");
-    incorrectType.put("id", pb.xs.intVal(1));
+    incorrectType.put("id", pb.xs.string("random"));
 
     try {
       tableauWriter.accept(incorrectType);
