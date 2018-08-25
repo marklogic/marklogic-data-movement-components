@@ -70,7 +70,7 @@ public abstract class AbstractDataMovementTest extends Assert {
 	}
 
 	@Before
-	public void setup() {
+	public void setupAbstractDataMovementTest() {
 		queryBatcherTemplate = new QueryBatcherTemplate(newClient("Documents"));
 		queryBatcherTemplate.setJobName("manage-collections-test");
 		queryBatcherTemplate.setBatchSize(1);
