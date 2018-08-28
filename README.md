@@ -44,6 +44,7 @@ The following jobs exist:
 1. AddCollectionsJob
 1. AddPermissionsJob
 1. DeleteCollectionsJob
+1. DeleteJob - added in 1.1
 1. ExportBatchesToDirectoryJob
 1. ExportBatchesToZipsJob
 1. ExportToFileJob
