@@ -14,6 +14,10 @@ import java.io.RandomAccessFile;
 
 /**
  * Job for exporting all documents matching a query to a single file.
+ *
+ * The 1.1 release added <code>setOmitLastRecordSuffix</code>, which can be used to (among other things) write all
+ * JSON documents to an array via a record suffix of ",", but the comma after the last document will be removed so that
+ * a valid array is written to the file.
  */
 public class ExportToFileJob extends AbstractQueryBatcherJob {
 
