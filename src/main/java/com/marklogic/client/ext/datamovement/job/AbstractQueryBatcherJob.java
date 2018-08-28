@@ -108,6 +108,8 @@ public abstract class AbstractQueryBatcherJob extends BatcherConfig implements Q
 		addJobProperty("consistentSnapshot", "Whether or not to apply a consistent snapshot to the query for records; defaults to true",
 			value -> setConsistentSnapshot(Boolean.parseBoolean(value)));
 
+		addJobProperty("jobId", "Optional ID for the Data Movement job", value -> setJobId(value));
+
 		addJobProperty("jobName", "Optional name for the Data Movement job", value -> setJobName(value));
 
 		addJobProperty("logBatches", "Log each batch to stdout as it's processed",
