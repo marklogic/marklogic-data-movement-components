@@ -40,4 +40,20 @@ public class DeleteCollectionsTest extends AbstractDataMovementTest {
 		assertNull(client.newDocumentManager().exists(FIRST_URI));
 		assertNull(client.newDocumentManager().exists(SECOND_URI));
 	}
+
+	/**
+	 * Any job that extends BatcherConfig can be used here for this test, which is just to verify that the jobId and
+	 * jobName properties are applied correctly.
+	 */
+	@Test
+	public void configureJobIdAndName() {
+		Properties props = new Properties();
+		props.setProperty("jobId", "my-job-id");
+		props.setProperty("jobName", "My Job");
+
+		DeleteCollectionsJob job = new DeleteCollectionsJob();
+		job.configureJob(props);
+		assertEquals("my-job-id", job.getJobId());
+		assertEquals("My Job", job.getJobName());
+	}
 }

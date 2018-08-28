@@ -15,12 +15,16 @@ public class BatcherConfig {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
+	private String jobId;
 	private String jobName;
 	private Integer batchSize = DEFAULT_BATCH_SIZE;
 	private Integer threadCount = DEFAULT_THREAD_COUNT;
 	private ForestConfiguration forestConfig;
 
 	public void prepareBatcher(Batcher batcher) {
+		if (jobId != null) {
+			batcher.withJobId(jobId);
+		}
 		if (jobName != null) {
 			batcher.withJobName(jobName);
 		}
@@ -41,6 +45,15 @@ public class BatcherConfig {
 
 	public BatcherConfig setJobName(String jobName) {
 		this.jobName = jobName;
+		return this;
+	}
+
+	public String getJobId() {
+		return jobId;
+	}
+
+	public BatcherConfig setJobId(String jobId) {
+		this.jobId = jobId;
 		return this;
 	}
 
