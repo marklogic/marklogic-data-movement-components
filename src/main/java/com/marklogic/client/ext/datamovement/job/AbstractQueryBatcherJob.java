@@ -2,13 +2,16 @@ package com.marklogic.client.ext.datamovement.job;
 
 import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.datamovement.*;
+import com.marklogic.client.document.ServerTransform;
 import com.marklogic.client.ext.datamovement.*;
 import com.marklogic.client.ext.datamovement.listener.SimpleBatchLoggingListener;
+import com.marklogic.client.ext.datamovement.util.TransformPropertyValueParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -146,6 +149,19 @@ public abstract class AbstractQueryBatcherJob extends BatcherConfig implements Q
 		SimpleJobProperty prop = new SimpleJobProperty(name, description, propertyValueConsumer);
 		prop.setRequired(true);
 		jobProperties.add(prop);
+	}
+
+	/**
+	 * Several jobs support a transform parameter, and we want each of them to inherit the support for providing
+	 * optional parameters after the transform name.
+	 *
+	 * @param consumer
+	 */
+	protected void addTransformJobProperty(BiConsumer<String, ServerTransform> consumer) {
+		addJobProperty("transform", "The name of a REST transform to apply to each record. Parameters can be passed " +
+				"to the transform by appending them to the value of this property, delimited by commas - e.g. myTransform,param1,value1,param2,value2",
+			value -> consumer.accept(value, TransformPropertyValueParser.parsePropertyValue(value))
+		);
 	}
 
 	/**

@@ -5,8 +5,10 @@ import com.marklogic.client.datamovement.ExportListener;
 import com.marklogic.client.document.ServerTransform;
 import com.marklogic.client.ext.datamovement.QueryBatcherJobTicket;
 import com.marklogic.client.ext.datamovement.consumer.WriteToZipConsumer;
+import com.marklogic.client.ext.datamovement.util.TransformPropertyValueParser;
 
 import java.io.File;
+import java.util.function.BiConsumer;
 
 public class ExportToZipJob extends AbstractQueryBatcherJob {
 
@@ -23,8 +25,7 @@ public class ExportToZipJob extends AbstractQueryBatcherJob {
 		addJobProperty("flattenUri", "Whether or not record URIs are flattened before being used as zip entry names; defaults to false",
 			value -> getWriteToZipConsumer().setFlattenUri(Boolean.parseBoolean(value)));
 
-		addJobProperty("transform", "The name of a REST transform to apply to each record before it is written to the zip file",
-			value -> getExportListener().withTransform(new ServerTransform(value)));
+		addTransformJobProperty((value, transform) -> getExportListener().withTransform(transform));
 
 		addJobProperty("uriPrefix", "Prefix to prepend to each URI it is used as an entry name; applied after a URI is optionally flattened",
 			value -> getWriteToZipConsumer().setUriPrefix(value));

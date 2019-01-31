@@ -53,8 +53,7 @@ public class ExportToFileJob extends AbstractQueryBatcherJob {
 		addJobProperty("recordSuffix", "Optional content to be written after each record is written",
 			value -> setRecordSuffix(value));
 
-		addJobProperty("transform", "Optional REST transform to apply to each record before it is written",
-			value -> getExportListener().withTransform(new ServerTransform(value)));
+		addTransformJobProperty((value, transform) -> getExportListener().withTransform(transform));
 	}
 
 	public ExportToFileJob(File exportFile) {
