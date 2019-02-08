@@ -5,13 +5,15 @@ import com.marklogic.client.document.DocumentRecord;
 import com.marklogic.client.io.DOMHandle;
 import com.marklogic.client.io.Format;
 import com.marklogic.client.io.StringHandle;
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import java.io.IOException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 
 /**
@@ -26,29 +28,32 @@ public class XmlOutputListener implements ExportToWriterListener.OutputListener 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private boolean omitXmlDeclaration = true;
+	private TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
 	@Override
 	public String generateOutput(DocumentRecord documentRecord) {
 		if (Format.XML.equals(documentRecord.getFormat())) {
-			DOMHandle handle = documentRecord.getContent(new DOMHandle());
-			Document document = handle.get();
-
-			OutputFormat format = new OutputFormat(handle.get());
-			format.setOmitXMLDeclaration(omitXmlDeclaration);
-
-			StringWriter writer = new StringWriter();
-			try {
-				new XMLSerializer(writer, format).serialize(document);
-				return writer.toString();
-			} catch (IOException e) {
-				throw new RuntimeException("Unable to serialize XML document to string: " + e.getMessage(), e);
-			}
+			return convertDocumentToString(documentRecord.getContent(new DOMHandle()).get());
 		} else if (logger.isDebugEnabled()) {
 			logger.debug(String.format("Document '%s' has a format of '%s', so will not attempt to remove the XML declaration from it",
 				documentRecord.getUri(), documentRecord.getFormat().name()));
 		}
 
 		return documentRecord.getContent(new StringHandle()).get();
+	}
+
+	protected String convertDocumentToString(Document document) {
+		try {
+			Transformer transformer = transformerFactory.newTransformer();
+			if (omitXmlDeclaration) {
+				transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			}
+			StringWriter writer = new StringWriter();
+			transformer.transform(new DOMSource(document), new StreamResult(writer));
+			return writer.toString();
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to serialize XML document to string: " + e.getMessage(), e);
+		}
 	}
 
 	public void setOmitXmlDeclaration(boolean omitXmlDeclaration) {

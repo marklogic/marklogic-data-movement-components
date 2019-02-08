@@ -3,7 +3,6 @@ package com.marklogic.client.ext.datamovement.job;
 import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.datamovement.ExportToWriterListener;
 import com.marklogic.client.datamovement.QueryBatcher;
-import com.marklogic.client.document.ServerTransform;
 import com.marklogic.client.ext.datamovement.QueryBatcherJobTicket;
 import com.marklogic.client.ext.datamovement.listener.XmlOutputListener;
 
