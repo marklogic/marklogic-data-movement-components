@@ -35,8 +35,7 @@ public class ExportBatchesToDirectoryJob extends AbstractQueryBatcherJob {
 		addJobProperty("recordSuffix", "Optional content to be written after each record is written",
 			value -> getExportListener().withRecordSuffix(value));
 
-		addJobProperty("transform", "Optional REST transform to apply to each record before it is written",
-			value -> getExportListener().withTransform(new ServerTransform(value)));
+		addTransformJobProperty((value, transform) -> getExportListener().withTransform(transform));
 	}
 
 	public ExportBatchesToDirectoryJob(File exportDir) {
