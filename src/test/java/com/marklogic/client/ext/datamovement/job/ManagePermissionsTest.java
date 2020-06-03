@@ -16,6 +16,7 @@ public class ManagePermissionsTest extends AbstractDataMovementTest {
 	/**
 	 * Note that with ML9 and previous versions, rest-reader/read and rest-writer/update are always added to documents
 	 * inserted via /v1/documents.
+	 * On ML10 the rest permissions are no longer added automatically
 	 */
 	@Test
 	public void test() {
@@ -36,7 +37,7 @@ public class ManagePermissionsTest extends AbstractDataMovementTest {
 
 		ClientHelper helper = new ClientHelper(client);
 		DocumentMetadataHandle.DocumentPermissions perms = helper.getMetadata(uri).getPermissions();
-		assertEquals(3, perms.size());
+		assertEquals(1, perms.size());
 		assertEquals(2, perms.get("app-user").size());
 		assertTrue(perms.get("app-user").contains(DocumentMetadataHandle.Capability.READ));
 		assertTrue(perms.get("app-user").contains(DocumentMetadataHandle.Capability.UPDATE));
