@@ -20,6 +20,13 @@ As an example, if the JARs are were copied to a "lib" directory, the following l
     compile files("lib/tableauserver.jar")
     compile files("lib/jna.jar")
 
+for Extract API 2.0 hyper files use:
+
+    compile files("lib/tableauhyperapi-javadoc.jar")
+    compile files("lib/tableauhyperapi-macos.jar")
+    compile files("lib/tableauhyperapi.jar")
+    compile files("lib/jna-5.2.0.jar")
+
 ## Publish with the Gradle task 
 
 The task "createTableauPublication" can be used to automate the next step below. This task compiles and publishes a 
