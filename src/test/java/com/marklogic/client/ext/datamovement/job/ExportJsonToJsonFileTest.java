@@ -1,8 +1,11 @@
 package com.marklogic.client.ext.datamovement.job;
 
 import com.marklogic.client.document.DocumentWriteOperation;
-import com.marklogic.client.ext.batch.SimpleDocumentWriteOperation;
 import com.marklogic.client.ext.datamovement.AbstractDataMovementTest;
+import com.marklogic.client.impl.DocumentWriteOperationImpl;
+import com.marklogic.client.io.DocumentMetadataHandle;
+import com.marklogic.client.io.Format;
+import com.marklogic.client.io.StringHandle;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.util.FileCopyUtils;
@@ -77,8 +80,11 @@ public class ExportJsonToJsonFileTest extends AbstractDataMovementTest {
 	protected void writeDocuments(String... uris) {
 		List<DocumentWriteOperation> list = new ArrayList<>();
 		uris = new String[]{"test1.json", "test2.json"};
+		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+		metadata.getCollections().add(COLLECTION);
 		for (String uri : uris) {
-			list.add(new SimpleDocumentWriteOperation(uri, "{\"uri\":\"" + uri + "\"}", COLLECTION));
+			list.add(new DocumentWriteOperationImpl(DocumentWriteOperation.OperationType.DOCUMENT_WRITE, uri, metadata,
+				new StringHandle("{\"uri\":\"" + uri + "\"}").withFormat(Format.XML)));
 		}
 		writeDocuments(list);
 	}

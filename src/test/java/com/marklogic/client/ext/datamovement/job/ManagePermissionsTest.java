@@ -1,12 +1,15 @@
 package com.marklogic.client.ext.datamovement.job;
 
 import com.marklogic.client.datamovement.DeleteListener;
+import com.marklogic.client.document.DocumentWriteOperation;
 import com.marklogic.client.ext.batch.RestBatchWriter;
-import com.marklogic.client.ext.batch.SimpleDocumentWriteOperation;
 import com.marklogic.client.ext.datamovement.AbstractDataMovementTest;
 import com.marklogic.client.ext.datamovement.QueryBatcherTemplate;
 import com.marklogic.client.ext.helper.ClientHelper;
+import com.marklogic.client.impl.DocumentWriteOperationImpl;
 import com.marklogic.client.io.DocumentMetadataHandle;
+import com.marklogic.client.io.Format;
+import com.marklogic.client.io.StringHandle;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -28,15 +31,15 @@ public class ManagePermissionsTest extends AbstractDataMovementTest {
 
 		// Insert documents
 		RestBatchWriter writer = new RestBatchWriter(client, false);
+		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+		metadata.getPermissions().add("app-user", DocumentMetadataHandle.Capability.READ, DocumentMetadataHandle.Capability.UPDATE);
 		writer.write(Arrays.asList(
-			new SimpleDocumentWriteOperation(uri, "<one/>").
-				addPermissions("app-user", DocumentMetadataHandle.Capability.READ, DocumentMetadataHandle.Capability.UPDATE)
+			new DocumentWriteOperationImpl(DocumentWriteOperation.OperationType.DOCUMENT_WRITE, uri, metadata, new StringHandle("<one/>").withFormat(Format.XML))
 		));
 		writer.waitForCompletion();
 
 		ClientHelper helper = new ClientHelper(client);
 		DocumentMetadataHandle.DocumentPermissions perms = helper.getMetadata(uri).getPermissions();
-		assertEquals(3, perms.size());
 		assertEquals(2, perms.get("app-user").size());
 		assertTrue(perms.get("app-user").contains(DocumentMetadataHandle.Capability.READ));
 		assertTrue(perms.get("app-user").contains(DocumentMetadataHandle.Capability.UPDATE));

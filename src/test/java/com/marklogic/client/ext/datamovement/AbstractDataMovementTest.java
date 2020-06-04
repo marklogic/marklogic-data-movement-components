@@ -7,9 +7,12 @@ import com.marklogic.client.ext.ConfiguredDatabaseClientFactory;
 import com.marklogic.client.ext.DatabaseClientConfig;
 import com.marklogic.client.ext.DefaultConfiguredDatabaseClientFactory;
 import com.marklogic.client.ext.batch.DataMovementBatchWriter;
-import com.marklogic.client.ext.batch.SimpleDocumentWriteOperation;
 import com.marklogic.client.ext.datamovement.job.DeleteCollectionsJob;
 import com.marklogic.client.ext.spring.SpringDatabaseClientConfig;
+import com.marklogic.client.impl.DocumentWriteOperationImpl;
+import com.marklogic.client.io.DocumentMetadataHandle;
+import com.marklogic.client.io.Format;
+import com.marklogic.client.io.StringHandle;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -92,8 +95,11 @@ public abstract class AbstractDataMovementTest extends Assert {
 
 	protected void writeDocuments(String... uris) {
 		List<DocumentWriteOperation> list = new ArrayList<>();
+		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+		metadata.getCollections().add(COLLECTION);
 		for (String uri : uris) {
-			list.add(new SimpleDocumentWriteOperation(uri, "<test>" + uri + "</test>", COLLECTION));
+			list.add(new DocumentWriteOperationImpl(DocumentWriteOperation.OperationType.DOCUMENT_WRITE, uri,
+				metadata, new StringHandle("<test>" + uri + "</test>").withFormat(Format.XML)));
 		}
 		writeDocuments(list);
 	}
