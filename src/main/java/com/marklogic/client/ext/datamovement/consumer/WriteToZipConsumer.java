@@ -11,8 +11,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * Intended to be used with DMSDK's ExportListener class as a Consumer<DocumentRecord>. Supports writing all documents
- * to a single zip file.
+ * Intended to be used with DMSDK's ExportListener class. Supports writing all documents to a single zip file.
  *
  * If a File is used to construct this class, be sure to call close() after all of the documents have been written, so
  * that the ZipOutputStream that is opened on the File is properly closed.

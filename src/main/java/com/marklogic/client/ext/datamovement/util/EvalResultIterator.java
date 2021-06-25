@@ -5,7 +5,7 @@ import com.marklogic.client.eval.EvalResult;
 import java.util.Iterator;
 
 /**
- * Adapts an Iterator<EvalResult> to an Iterator<String> so that it can be used easily with a DMSDK QueryBatcher.
+ * Adapts an Iterator of EvalResults to an Iterator of Strings so that it can be used easily with a DMSDK QueryBatcher.
  */
 public class EvalResultIterator implements Iterator<String> {
 

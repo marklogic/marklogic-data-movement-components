@@ -37,7 +37,6 @@ public class ExportBatchesToDirectoryListener extends AbstractExportBatchesListe
 	 * Uses a FileWriter to write the batch to a single file.
 	 *
 	 * @param queryBatch
-	 * @throws IOException
 	 */
 	protected void exportBatch(QueryBatch queryBatch) {
 		File file = getFileForBatch(queryBatch, exportDir);
