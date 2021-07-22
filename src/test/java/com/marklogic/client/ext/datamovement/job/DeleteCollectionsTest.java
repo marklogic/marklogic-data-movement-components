@@ -2,10 +2,12 @@ package com.marklogic.client.ext.datamovement.job;
 
 import com.marklogic.client.datamovement.DeleteListener;
 import com.marklogic.client.ext.datamovement.AbstractDataMovementTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Properties;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DeleteCollectionsTest extends AbstractDataMovementTest {
 
@@ -16,7 +18,7 @@ public class DeleteCollectionsTest extends AbstractDataMovementTest {
 
         DeleteCollectionsJob job = new DeleteCollectionsJob();
         List<String> messages = job.configureJob(props);
-        assertTrue("This job doesn't require where* properties to be set", messages.isEmpty());
+        assertTrue(messages.isEmpty(), "This job doesn't require where* properties to be set");
 
         assertNotNull(client.newDocumentManager().exists(FIRST_URI));
         assertNotNull(client.newDocumentManager().exists(SECOND_URI));
@@ -32,8 +34,8 @@ public class DeleteCollectionsTest extends AbstractDataMovementTest {
         DeleteCollectionsJob job = new DeleteCollectionsJob(COLLECTION);
 
         List<String> messages = job.configureJob(new Properties());
-        assertTrue("This job doesn't require where* properties to be set, and 'collections' shouldn't be required " +
-                "since the collections were specified via the constructor", messages.isEmpty());
+        assertTrue(messages.isEmpty(), "This job doesn't require where* properties to be set, and 'collections' shouldn't be required " +
+                "since the collections were specified via the constructor");
 
         assertNotNull(client.newDocumentManager().exists(FIRST_URI));
         assertNotNull(client.newDocumentManager().exists(SECOND_URI));

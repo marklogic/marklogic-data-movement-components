@@ -27,16 +27,16 @@ dependencies {
     api 'com.marklogic:marklogic-client-api:5.5.0'
     implementation 'org.slf4j:slf4j-api:1.7.31'
 
-    testImplementation "junit:junit:4+"
-    // Sticking with the latest 4.3.x for tests; including the latest 5.2.x release oddly resulted in the servlet package
-    // being required
-    testImplementation "org.springframework:spring-test:4.3.29.RELEASE"
-    testImplementation "com.marklogic:ml-javaclient-util:4.3.0"
+    testImplementation "com.marklogic:marklogic-junit5:1.1.0"
 
     // Forcing Spring to use logback instead of commons-logging
     testImplementation "ch.qos.logback:logback-classic:1.2.4"
     testImplementation "org.slf4j:jcl-over-slf4j:1.7.31"
     testImplementation "org.slf4j:slf4j-api:1.7.31"
+}
+
+test {
+    useJUnitPlatform()
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

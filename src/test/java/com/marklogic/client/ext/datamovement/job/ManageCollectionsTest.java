@@ -5,10 +5,12 @@ import com.marklogic.client.ext.datamovement.UrisQueryQueryBatcherBuilder;
 import com.marklogic.client.ext.datamovement.listener.RemoveCollectionsListener;
 import com.marklogic.client.ext.datamovement.listener.SetCollectionsListener;
 import com.marklogic.client.ext.helper.ClientHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Properties;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ManageCollectionsTest extends AbstractDataMovementTest {
 
@@ -27,14 +29,14 @@ public class ManageCollectionsTest extends AbstractDataMovementTest {
 		props.setProperty("collections", "red");
 		RemoveCollectionsJob removeCollectionsJob = new RemoveCollectionsJob();
 		List<String> messages = removeCollectionsJob.configureJob(props);
-		assertTrue("Should not have any validation messages: " + messages, messages.isEmpty());
+		assertTrue(messages.isEmpty(), "Should not have any validation messages: " + messages);
 		removeCollectionsJob.run(client);
 
 		props.setProperty("collections", "blue,green");
 		props.setProperty("whereCollections", COLLECTION);
 		removeCollectionsJob = new RemoveCollectionsJob();
 		messages = removeCollectionsJob.configureJob(props);
-		assertTrue("Should not have any validation messages: " + messages, messages.isEmpty());
+		assertTrue(messages.isEmpty(), "Should not have any validation messages: " + messages);
 		removeCollectionsJob.run(client);
 		assertUriInCollections(FIRST_URI, COLLECTION);
 		assertUriInCollections(SECOND_URI, COLLECTION);
