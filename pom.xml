@@ -40,13 +40,13 @@ It is not intended to be used to build this project.
     <dependency>
       <groupId>com.marklogic</groupId>
       <artifactId>marklogic-client-api</artifactId>
-      <version>5.5.0</version>
+      <version>5.5.3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.31</version>
+      <version>1.7.36</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
