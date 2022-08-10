@@ -24,15 +24,15 @@ repositories {
 }
 
 dependencies {
-    api 'com.marklogic:marklogic-client-api:5.5.0'
-    implementation 'org.slf4j:slf4j-api:1.7.31'
+    api 'com.marklogic:marklogic-client-api:5.5.3'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
 
-    testImplementation "com.marklogic:marklogic-junit5:1.1.0"
+    testImplementation 'com.marklogic:marklogic-junit5:1.2.0'
 
     // Forcing Spring to use logback instead of commons-logging
-    testImplementation "ch.qos.logback:logback-classic:1.2.4"
-    testImplementation "org.slf4j:jcl-over-slf4j:1.7.31"
-    testImplementation "org.slf4j:slf4j-api:1.7.31"
+    testImplementation 'ch.qos.logback:logback-classic:1.2.11'
+    testImplementation 'org.slf4j:jcl-over-slf4j:1.7.36'
+    testImplementation 'org.slf4j:slf4j-api:1.7.36'
 }
 
 test {
