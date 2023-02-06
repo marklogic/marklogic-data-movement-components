@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.marklogic"
-version = "2.5.0"
+version = "2.6.0"
 
 java {
     sourceCompatibility = 1.8
@@ -21,12 +21,11 @@ ext {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    api 'com.marklogic:marklogic-client-api:6.0.0'
+    api 'com.marklogic:marklogic-client-api:6.1.0'
     implementation 'org.slf4j:slf4j-api:1.7.36'
 
     testImplementation 'com.marklogic:marklogic-junit5:1.2.0'
