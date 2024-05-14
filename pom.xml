@@ -12,7 +12,7 @@ It is not intended to be used to build this project.
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.marklogic</groupId>
   <artifactId>marklogic-data-movement-components</artifactId>
-  <version>2.7.0</version>
+  <version>2.8.0</version>
   <name>com.marklogic:marklogic-data-movement-components</name>
   <description>Reusable components that depend solely on MarkLogic's DMSDK</description>
   <url>https://github.com/marklogic-community/marklogic-data-movement-components</url>
