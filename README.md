@@ -1,3 +1,9 @@
+# Archived repository
+
+This repository has been archived. All classes have been migrated to the 
+[ml-javaclient-util subproject in the ml-gradle repository](https://github.com/marklogic/ml-gradle/tree/master/ml-javaclient-util). 
+The classes will be available in the upcoming ml-gradle 6.0.0 release.  
+
 # Reusable components for the MarkLogic Data Movement SDK
 
 The [Data Movement SDK](http://docs.marklogic.com/guide/java/data-movement) (DMSDK) is intended for manipulating large numbers
